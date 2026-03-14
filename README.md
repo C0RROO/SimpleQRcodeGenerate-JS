@@ -22,7 +22,7 @@
 
 ## Демо
 
-[Ссылка на сайт](https://holid4y.github.io/SimpleQRcodeGenerate-JS/)
+[Ссылка на сайт](https://c0rroo.github.io/SimpleQRcodeGenerate-JS/)
 
 ## Вклад и обратная связь
 

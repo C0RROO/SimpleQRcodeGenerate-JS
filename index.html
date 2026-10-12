@@ -1,128 +1,335 @@
 <!DOCTYPE html>
-<html lang="ru" data-bs-theme="dark">
+<html lang="ru" data-theme="graphite">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="QR-Generate">
-    <meta name="apple-mobile-web-app-title" content="QR-Generate">
-    <meta property="og:title" content="QR-Generate">
-    <meta name="description" content="Генерация QR-кодов">
-    <title>QR-Generate</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/style.css">
-    <script src="js/bootstrap.bundle.min.js"></script>
-    <script src="js/qrcode.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0d0e11">
+  <title>QR Generate</title>
+  <link rel="stylesheet" href="./style.css">
 </head>
-<body>   
-  <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
-    <symbol id="tiktok" viewBox="0 0 16 16">
-      <path d="M9 0h1.98c.144.715.54 1.617 1.235 2.512C12.895 3.389 13.797 4 15 4v2c-1.753 0-3.07-.814-4-1.829V11a5 5 0 1 1-5-5v2a3 3 0 1 0 3 3z"/>
-    </symbol>
-    <symbol id="telegram" viewBox="0 0 16 16">
-      <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.287 5.906q-1.168.486-4.666 2.01-.567.225-.595.442c-.03.243.275.339.69.47l.175.055c.408.133.958.288 1.243.294q.39.01.868-.32 3.269-2.206 3.374-2.23c.05-.012.12-.026.166.016s.042.12.037.141c-.03.129-1.227 1.241-1.846 1.817-.193.18-.33.307-.358.336a8 8 0 0 1-.188.186c-.38.366-.664.64.015 1.088.327.216.589.393.85.571.284.194.568.387.936.629q.14.092.27.187c.331.236.63.448.997.414.214-.02.435-.22.547-.82.265-1.417.786-4.486.906-5.751a1.4 1.4 0 0 0-.013-.315.34.34 0 0 0-.114-.217.53.53 0 0 0-.31-.093c-.3.005-.763.166-2.984 1.09"/>
-    </symbol>
-    <symbol id="vk" viewBox="0 0 48 48">
-      <path d="M0 23.04C0 12.1788 0 6.74826 3.37413 3.37413C6.74826 0 12.1788 0 23.04 0H24.96C35.8212 0 41.2517 0 44.6259 3.37413C48 6.74826 48 12.1788 48 23.04V24.96C48 35.8212 48 41.2517 44.6259 44.6259C41.2517 48 35.8212 48 24.96 48H23.04C12.1788 48 6.74826 48 3.37413 44.6259C0 41.2517 0 35.8212 0 24.96V23.04Z" fill-rule="evenodd" clip-rule="evenodd"/>
-      <path d="M25.54 34.5801C14.6 34.5801 8.3601 27.0801 8.1001 14.6001H13.5801C13.7601 23.7601 17.8 27.6401 21 28.4401V14.6001H26.1602V22.5001C29.3202 22.1601 32.6398 18.5601 33.7598 14.6001H38.9199C38.0599 19.4801 34.4599 23.0801 31.8999 24.5601C34.4599 25.7601 38.5601 28.9001 40.1201 34.5801H34.4399C33.2199 30.7801 30.1802 27.8401 26.1602 27.4401V34.5801H25.54Z" fill="#1c1b22"/>
-    </symbol>
-  </svg>
 
-  <nav class="navbar navbar-expand-lg blur">
-      <div class="container-fluid">
-          <span class="navbar-brand">QR-Generate</span>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-              <ul class="nav nav-pills ms-auto" id="myTab" role="tablist">
-                  <li class="nav-item" role="presentation">
-                      <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Генерировать</button>
-                  </li>
-                  <li class="nav-item" role="presentation">
-                      <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Сканировать</button>
-                  </li>
-                  <li class="nav-item"><a href="https://github.com/Holid4y/SimpleQRcodeGenerate-JS.git" class="nav-link" aria-current="page" target="_blank">Перейти на Git</a></li>
-              </ul>
+<body>
+  <div class="loader" id="loader">
+    <div class="loader__grid">
+      <i></i><i></i><i></i>
+      <i></i><i></i><i></i>
+      <i></i><i></i><i></i>
+    </div>
+  </div>
+
+  <div class="bg-particles" id="bgParticles"></div>
+  
+  <main>
+    <section class="view is-active" data-view="gen">
+      <nav class="crumbs" id="crumbs">
+        <span class="crumbs__pill" id="crumbsPill"></span>
+        <button class="crumb is-active" data-step="1">
+          <span class="crumb__num"><span>1</span></span>
+          <span class="crumb__label">Содержимое</span>
+        </button>
+        <button class="crumb" data-step="2">
+          <span class="crumb__num"><span>2</span></span>
+          <span class="crumb__label">Дизайн</span>
+        </button>
+        <button class="crumb" data-step="3">
+          <span class="crumb__num"><span>3</span></span>
+          <span class="crumb__label">Детали</span>
+        </button>
+      </nav>
+
+      <div class="step-page is-active" data-step="1">
+        <header class="step-head">
+          <h1>Что закодировать</h1>
+          <p>Выберите тип — превью обновится мгновенно.</p>
+        </header>
+        <div class="step-body">
+          <div class="chips" id="typeChips">
+            <button class="chip is-active" data-type="url">Ссылка</button>
+            <button class="chip" data-type="text">Текст</button>
+            <button class="chip" data-type="wifi">Wi-Fi</button>
+            <button class="chip" data-type="geo">Гео</button>
+            <button class="chip" data-type="email">E-mail</button>
+            <button class="chip" data-type="tel">Телефон</button>
           </div>
+          <div id="typeForms">
+            <div class="tform" data-type="url">
+              <div class="field"><label>Адрес сайта</label>
+                <input class="input" id="t_url" type="text" placeholder="example.com/page" autocomplete="off"></div>
+            </div>
+            <div class="tform" data-type="text" hidden>
+              <div class="field"><label>Произвольный текст</label>
+                <textarea id="t_text" placeholder="Любой текст до ~2900 символов"></textarea></div>
+            </div>
+            <div class="tform" data-type="wifi" hidden>
+              <div class="row-2">
+                <div class="field"><label>Название (SSID)</label>
+                  <input class="input" id="w_ssid" placeholder="MyWiFi" autocomplete="off"></div>
+                <div class="field"><label>Шифрование</label>
+                  <select id="w_enc">
+                    <option value="WPA">WPA / WPA2 / WPA3</option>
+                    <option value="WEP">WEP</option>
+                    <option value="nopass">Без пароля</option>
+                  </select></div>
+              </div>
+              <div class="field" id="w_passField" style="margin-top:14px"><label>Пароль</label>
+                <input class="input" id="w_pass" placeholder="••••••••" autocomplete="off"></div>
+              <label class="switch" style="margin-top:14px">
+                <input type="checkbox" id="w_hidden"><span>Скрытая сеть</span></label>
+            </div>
+            <div class="tform" data-type="geo" hidden>
+              <div class="row-2">
+                <div class="field"><label>Широта</label><input class="input" id="g_lat" placeholder="55.7558"></div>
+                <div class="field"><label>Долгота</label><input class="input" id="g_lng" placeholder="37.6173"></div>
+              </div>
+              <button class="btn btn--ghost btn--sm" id="geoBtn" style="margin-top:14px;align-self:flex-start">📍 Моё местоположение</button>
+            </div>
+            <div class="tform" data-type="email" hidden>
+              <div class="field"><label>Кому</label><input class="input" id="e_to" placeholder="mail@example.com"></div>
+              <div class="field" style="margin-top:14px"><label>Тема</label>
+                <input class="input" id="e_subj" placeholder="Тема письма"></div>
+              <div class="field" style="margin-top:14px"><label>Текст письма</label>
+                <textarea id="e_body" placeholder="Здравствуйте!"></textarea></div>
+            </div>
+            <div class="tform" data-type="tel" hidden>
+              <div class="field"><label>Номер телефона</label>
+                <input class="input" id="p_num" placeholder="+79000000000"></div>
+            </div>
+          </div>
+          <div class="btn-row">
+            <button class="btn btn--primary" data-next="2">Далее — дизайн</button>
+          </div>
+        </div>
       </div>
+
+      <div class="step-page" data-step="2">
+        <header class="step-head">
+          <h1>Дизайн</h1>
+          <p>Цвета и форма. Всё меняется на лету.</p>
+        </header>
+        <div class="step-body">
+          <div class="row-2">
+            <div class="field"><label>Цвет кода</label><div class="cp" data-for="fg"></div></div>
+            <div class="field"><label>Цвет фона</label><div class="cp" data-for="bg"></div></div>
+          </div>
+          <label class="switch"><input type="checkbox" id="gradOn"><span>Градиент</span></label>
+          <div class="sub" id="gradBox" hidden>
+            <div class="field"><label>Второй цвет</label><div class="cp" data-for="fg2"></div></div>
+            <div class="field"><label>Угол — <b id="angleVal">45°</b></label>
+              <input type="range" id="angle" min="0" max="360" step="5" value="45"></div>
+          </div>
+          <label class="switch"><input type="checkbox" id="transparent"><span>Прозрачный фон</span></label>
+          <div class="field">
+            <label>Форма модулей</label>
+            <div class="seg" id="shapeSeg">
+              <button data-val="square" class="is-active"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14"/></svg><span>Квадрат</span></button>
+              <button data-val="rounded"><svg viewBox="0 0 24 24"><path d="M5 12a7 7 0 0 1 7-7h7v7a7 7 0 0 1-7 7H5z"/></svg><span>Мягкие</span></button>
+              <button data-val="dots"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/></svg><span>Точки</span></button>
+              <button data-val="diamond"><svg viewBox="0 0 24 24"><path d="M12 3l9 9-9 9-9-9z"/></svg><span>Ромбы</span></button>
+              <button data-val="plus"><svg viewBox="0 0 24 24"><path d="M10 4h4v6h6v4h-6v6h-4v-6H4v-4h6z"/></svg><span>Кресты</span></button>
+              <button data-val="star"><svg viewBox="0 0 24 24"><path d="M12 3l2.4 6.1L21 11l-5.5 3.4L16.5 21 12 17.5 7.5 21l1-6.6L3 11l6.6-1.9z"/></svg><span>Звёзды</span></button>
+              <button data-val="hex"><svg viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/></svg><span>Гексы</span></button>
+              <button data-val="bar-h"><svg viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="6" rx="3"/></svg><span>Полосы</span></button>
+              <button data-val="bar-v"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="18" rx="3"/></svg><span>Столбцы</span></button>
+            </div>
+          </div>
+          <div class="field">
+            <label>Уголки (глаза)</label>
+            <div class="seg" id="eyeSeg">
+              <button data-val="square" class="is-active"><svg viewBox="0 0 24 24"><path d="M4 4h8v2H6v6H4zm10 0h6v8h-2V6h-4zM4 14h2v6h6v2H4zm16 0v8h-8v-2h6v-6z"/></svg><span>Квадрат</span></button>
+              <button data-val="rounded"><svg viewBox="0 0 24 24"><path d="M3 7a4 4 0 0 1 4-4h6v2H7a2 2 0 0 0-2 2v6H3zm12-4h2a4 4 0 0 1 4 4v6h-2V7a2 2 0 0 0-2-2h-2zM3 11h2v6a2 2 0 0 0 2 2h6v2H7a4 4 0 0 1-4-4zm16 0h2v6a4 4 0 0 1-4 4h-6v-2h6a2 2 0 0 0 2-2z"/></svg><span>Мягкие</span></button>
+              <button data-val="circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="12" cy="12" r="3.5"/></svg><span>Круг</span></button>
+              <button data-val="leaf"><svg viewBox="0 0 24 24"><path d="M3 3h9a9 9 0 0 1 0 18H3zm10 0h8v8a9 9 0 0 1-8 8.9V3zM3 15h9v6H7a4 4 0 0 1-4-4z"/></svg><span>Лист</span></button>
+              <button data-val="dots"><svg viewBox="0 0 24 24"><path d="M4 4h2v2H4zm4 0h2v2H8zm4 0h2v2h-2zm4 0h2v2h-2zm4 0h2v2h-2zM4 8h2v2H4zm16 0h2v2h-2zM4 12h2v2H4zm16 0h2v2h-2zM4 16h2v2H4zm16 0h2v2h-2zM4 20h2v2H4zm4 0h2v2H8zm4 0h2v2h-2zm4 0h2v2h-2zm4 0h2v2h-2z" opacity=".6"/><circle cx="12" cy="12" r="2.5"/></svg><span>Точки</span></button>
+            </div>
+          </div>
+          <label class="switch"><input type="checkbox" id="eyeCustom"><span>Свой цвет уголков</span></label>
+          <div class="sub" id="eyeColorBox" hidden><div class="cp" data-for="eyeColor"></div></div>
+          <div class="btn-row">
+            <button class="btn" data-prev="1">Назад</button>
+            <button class="btn btn--primary" data-next="3">Далее — детали</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-page" data-step="3">
+        <header class="step-head">
+          <h1>Детали</h1>
+          <p>Логотип, рамка, коррекция ошибок.</p>
+        </header>
+        <div class="step-body">
+          <div class="row-2">
+            <div class="field"><label>Коррекция ошибок</label>
+              <select id="ecc">
+                <option value="L">L — 7%</option>
+                <option value="M" selected>M — 15%</option>
+                <option value="Q">Q — 25%</option>
+                <option value="H">H — 30% (логотип)</option>
+              </select></div>
+            <div class="field"><label>Отступ — <b id="marginVal">4</b></label>
+              <input type="range" id="margin" min="0" max="8" step="1" value="4"></div>
+          </div>
+          <div class="field"><label>Размер экспорта, px</label>
+            <div class="seg" id="sizeSeg">
+              <button data-val="512"><span>512</span></button>
+              <button data-val="1024" class="is-active"><span>1024</span></button>
+              <button data-val="2048"><span>2048</span></button>
+            </div>
+          </div>
+
+          <div class="logo-zone">
+            <label style="font-size:12px;font-weight:600;color:var(--text-2)">Логотип в центре</label>
+            <div class="logo-drop">
+              <div class="logo-card-preview" id="logoPreview">
+                <div class="logo-card-preview__inner" id="logoPreviewInner">
+                  <img id="logoPreviewImg" alt="" hidden>
+                </div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:10px;flex:1;min-width:200px">
+                <label class="upload-mini">
+                  <input type="file" id="logoInput" accept="image/*" hidden>
+                  <span>+ Загрузить логотип</span>
+                </label>
+                <button class="btn btn--sm btn--ghost" id="logoRemove" hidden style="align-self:flex-start">Убрать логотип</button>
+                <ul class="logo-hint-list">
+                  <li>QR-код генерируется с пустой зоной в центре</li>
+                  <li>Логотип всегда расположен по центру</li>
+                  <li>Уровень коррекции H восстанавливает данные</li>
+                </ul>
+              </div>
+            </div>
+            <div class="row-2">
+              <div class="field"><label>Размер логотипа — <b id="logoScaleVal">76%</b></label>
+                <input type="range" id="logoScale" min="40" max="95" step="1" value="76"></div>
+              <div class="field"><label>Скругление — <b id="logoRadiusVal">16%</b></label>
+                <input type="range" id="logoRadius" min="0" max="50" step="2" value="16"></div>
+            </div>
+          </div>
+
+          <label class="switch"><input type="checkbox" id="frameOn"><span>Рамка с подписью</span></label>
+          <div class="sub" id="frameBox" hidden>
+            <div class="field"><label>Подпись</label>
+              <input class="input" id="frameText" value="SCAN ME" maxlength="26"></div>
+            <div class="row-2">
+              <div class="field"><label>Цвет рамки</label><div class="cp" data-for="frameColor"></div></div>
+              <div class="field"><label>Цвет текста</label><div class="cp" data-for="frameTextColor"></div></div>
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn" data-prev="2">Назад</button>
+            <button class="btn btn--ghost" id="resetStyle">Сбросить</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" data-view="scan">
+      <header class="step-head"><h1>Сканер</h1><p>Загрузите изображение или включите камеру.</p></header>
+
+      <div class="scan">
+        <div class="scan-upload" id="scanUpload">
+          <div class="drop" id="dropzone">
+            <svg viewBox="0 0 24 24"><path d="M12 3l5 5h-3v6h-4V8H7zM5 17h14v2H5z"/></svg>
+            Перетащите картинку или <b>выберите файл</b>
+            <input type="file" id="fileInput" accept="image/*" hidden>
+          </div>
+          <button class="btn btn--primary scan-upload__cam" id="camStart">
+            <svg viewBox="0 0 24 24"><path d="M9 3l-1.5 2H4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.5L15 3H9zm3 5a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>
+            Камера
+          </button>
+        </div>
+
+        <div class="cam" id="cam" hidden>
+          <video id="camVideo" playsinline muted autoplay></video>
+          <div class="scanline"></div>
+          <i class="cam-corner tl"></i><i class="cam-corner tr"></i>
+          <i class="cam-corner bl"></i><i class="cam-corner br"></i>
+        </div>
+
+        <div class="cam-actions" id="camActions" hidden>
+          <button class="btn" id="camSwitch">Сменить камеру</button>
+          <button class="btn btn--ghost" id="camTorch" hidden>Подсветка</button>
+          <button class="btn btn--danger" id="camStop">Остановить</button>
+        </div>
+
+        <div class="scan-result" id="scanResult">
+          <div class="result-empty">
+            <h3>Здесь появится расшифровка</h3>
+            <p>Отсканируйте код камерой или загрузите изображение.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" data-view="history">
+      <header class="step-head">
+        <h1>История</h1>
+        <p>Последние 30 кодов. <button class="link-btn" id="histClear">Очистить всё</button></p>
+      </header>
+      <div class="hist" id="histGrid"></div>
+    </section>
+
+  </main>
+
+  <nav class="dock" id="dock">
+    <div class="dock__inner">
+      <button class="dock__btn is-active" data-view="gen">
+        <svg viewBox="0 0 24 24"><path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm8-2h2v2h-2v-2zm3 0h2v2h-2v-2zm3 0h2v2h-2v-2zm-6 3h2v2h-2v-2zm3 0h2v2h-2v-2zm3 0h2v2h-2v-2zm-6 3h2v2h-2v-2zm3 0h2v2h-2v-2zm3 0h2v2h-2v-2z"/></svg>
+        <span>Генератор</span>
+      </button>
+      <div class="dock__sep"></div>
+      <button class="dock__btn" data-view="scan">
+        <svg viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h2v2H5v2H3zm14-2h2a2 2 0 0 1 2 2v2h-2V5h-2V3zM3 17v2a2 2 0 0 0 2 2h2v-2H5v-2H3zm16 0v2h-2v2h2a2 2 0 0 0 2-2v-2h-2zM3 11h18v2H3v-2z"/></svg>
+        <span>Сканер</span>
+      </button>
+      <div class="dock__sep"></div>
+      <button class="dock__btn" data-view="history">
+        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm1-13h-2v6l5 3 1-1.7-4-2.3V7z"/></svg>
+        <span>История</span>
+        <span class="dock__badge" data-empty="1" id="histCount"></span>
+      </button>
+      <div class="dock__sep"></div>
+      <button class="dock__btn" id="themeBtn">
+        <svg id="themeIcon" viewBox="0 0 24 24"><path d="M9 .5a.8.8 0 0 1 .1.9A10.8 10.8 0 0 0 7.8 6.6C7.8 12.6 12.7 17.5 18.7 17.5c.9 0 1.7-.1 2.5-.3a.8.8 0 0 1 .8.3.8.8 0 0 1 0 1A12.5 12.5 0 0 1 12.5 24 12.5 12.5 0 0 1 0 11.6 12.5 12.5 0 0 1 7.7.1a.8.8 0 0 1 .9.4z"/></svg>
+        <span>Тема</span>
+      </button>
+    </div>
   </nav>
 
-
-  <div class="container-fluid d-flex align-items-center min-vh-100">
-    <main class="container">
-      <div class="tab-content" id="myTabContent">
-        <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
-          <div class="row">
-            <div class="col-12 col-md-12 col-lg-6">
-              <form>
-                <div class="row mb-3">
-                  <label for="text_qrcode" class="col-sm-2 col-form-label">Текст для генерации</label>
-                  <div class="col-sm-10"><input type="text" class="form-control" id="text_qrcode"></div>
-                </div>
-                <div class="row mb-3">
-                  <label for="customRange" class="col-sm-2 col-form-label">Отступ</label>
-                  <div class="col-sm-10"><input type="range" class="form-range" id="customRange"></div>
-                </div>
-                <div class="row mb-3">
-                  <div class="col-6 row mb-3">
-                    <label for="color_line" class="col-sm-5 col-form-label">Цвет линий</label>
-                    <div class="col-sm-7"><input type="color" class="form-control form-control-color w-100" id="color_line" value="#000000" title="Choose your color"></div>
-                  </div>
-                  <div class="col-6 row mb-3">
-                    <label for="color_bg" class="col-sm-5 col-form-label">Цвет фона</label>
-                    <div class="col-sm-7"><input type="color" class="form-control form-control-color w-100" id="color_bg" value="#ffffff" title="Choose your color"></div>
-                  </div>
-                </div>
-                <button type="submit" class="btn btn-primary mb-3 w-100">Генерировать / Generate</button>
-              </form>
-            </div>
-            <div class="col-12 col-md-12 col-lg-6">
-              <div class="card">
-                <div id="qrcode" style="display: none;" class="card-img-top"></div>
-                <img id="imagePlaceholder" src="media/img/licensed-image.jpg" class="card-img-top">
-                <div class="card-body"><a href="#" class="btn btn-primary w-100" id="downloadLink">Скачать / Save</a></div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
-            <form>
-                <div class="mb-3">
-                  <label for="formFile" class="form-label">Выбрать QR-code</label>
-                  <input class="form-control" type="file" id="formFile">
-                </div>                
-                <button type="submit" class="btn btn-primary mb-5 w-100">Сканировать / Scan</button>
-            </form>
-            <div class="card" aria-hidden="true">
-              <div class="card-body">
-                <p class="card-text placeholder-glow">
-                  <span class="placeholder col-7"></span>
-                  <span class="placeholder col-4"></span>
-                  <span class="placeholder col-4"></span>
-                  <span class="placeholder col-6"></span>
-                  <span class="placeholder col-8"></span>
-                </p>
-                <a class="btn btn-primary disabled placeholder col-6" aria-disabled="true">Перейти</a>
-              </div>
-            </div>
+  <aside class="float" id="floatWin">
+    <div class="float-head" id="floatHead">
+      <span class="float-head__dot"></span>
+      <span class="float-head__title">Предпросмотр</span>
+      <div class="float-head__btns">
+        <button id="floatReset" title="Сбросить">
+          <svg viewBox="0 0 16 16"><path d="M2 2h5v5H2V2zm7 0h5v5H9V2zM2 9h5v5H2V9zm7 0h5v5H9V9z"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="float-body">
+      <div class="qr-stage">
+        <canvas id="qrCanvas"></canvas>
+        <div class="qr-empty" id="qrEmpty">
+          <svg viewBox="0 0 24 24"><path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm8-2h2v2h-2v-2zm3 0h2v2h-2v-2zm3 0h2v2h-2v-2zm-6 3h2v2h-2v-2zm3 0h2v2h-2v-2zm3 0h2v2h-2v-2zm-6 3h2v2h-2v-2zm3 0h2v2h-2v-2zm3 0h2v2h-2v-2z"/></svg>
+          <p>Код появится автоматически</p>
         </div>
       </div>
-    </main>
-  </div>
+      <div class="float-foot">
+        <div class="meter" id="meter" data-state="ok">
+          <div class="meter__bar"><i id="meterFill"></i></div>
+          <div class="meter__row"><b id="meterLabel">Ожидание</b><span id="previewMeta"></span></div>
+        </div>
+        <div class="dl-row">
+          <button class="btn btn--primary btn--wide" id="dlPng" disabled>Скачать PNG</button>
+          <button class="btn" id="dlSvg" disabled>SVG</button>
+          <button class="btn" id="dlCopy" disabled>Копировать</button>
+        </div>
+      </div>
+    </div>
+  </aside>
 
-  <div class="d-none d-md-block">
-    <footer class="navbar fixed-bottom px-4" style="height: 60px;">
-      <ul class="nav align-items-center col-6">
-        <li class="nav-item"><a href="https://t.me/H0LID4Y" target="_blank" class="nav-link px-2 text-body-secondary"><svg class="bi me-2" width="25" height="25"><use xlink:href="#telegram"></use></svg></a></li>
-        <li class="nav-item"><a href="#" target="_blank" class="nav-link px-2 text-body-secondary"><svg class="bi me-2" width="25" height="25"><use xlink:href="#tiktok"></use></svg></a></li>
-        <li class="nav-item"><a href="https://vk.com/command_0110" target="_blank" class="nav-link px-2 text-body-secondary"><svg class="bi me-2" width="25" height="25"><use xlink:href="#vk"></use></svg></a></li>
-      </ul>
-      <p class="col-6 text-end mb-0">© 2024 QR-Generate</p>
-    </footer>
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.js"></script>
+  <div class="toast" id="toast"></div>
 
+  <script src="./script.js"></script>
 </body>
 </html>

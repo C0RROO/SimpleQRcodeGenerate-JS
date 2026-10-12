@@ -4,7 +4,7 @@
 
 ## Демо
 
-[c0rroo.github.io/SimpleQRcodeGenerate-JS](https://c0rroo.github.io/SimpleQRcodeGenerate-JS/)
+[QR Generate](https://c0rroo.github.io/SimpleQRcodeGenerate-JS/)
 
 ## Возможности генератора
 
